@@ -1,0 +1,87 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% подключение и настройка пакета листингов (verbatim)
+%%%
+
+\usepackage{verbatim}               % Подключаем пакет с расширением окружения verbatim.
+\usepackage{shortvrb}               % Подключаем пакет для короткой вставки выражений типа verbatim.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% подключение и настройка пакета listings
+%%%
+\usepackage{listings}
+
+%%%
+%%% настройка
+%%%
+
+\newcommand{\CommonBasicStyle}{
+    \footnotesize
+}
+
+\newcommand{\CommonCommentStyle}{
+    \sffamily\itshape\color{teal!50!black}
+}
+
+\newcommand{\cmnt}{\CommonCommentStyle}
+
+\newcommand{\CommonKeywordStyle}{
+    \bf\color{blue}
+}
+
+\newcommand{\CommonStringStyle}{
+    \color{violet}
+}
+
+
+\lstset{
+    frame               =   tb,
+    columns             =   fullflexible,
+    flexiblecolumns     =   true,
+    breaklines          =   true,
+    extendedchars       =   true,
+    keepspaces          =   true,
+    belowcaptionskip    =   0pt,
+    backgroundcolor=\color{white}
+}
+
+\lstset{
+    numbers=left,
+    numberstyle=\footnotesize\color{gray},
+}
+
+\lstset{
+    basicstyle=\CommonBasicStyle,
+}
+
+\lstset{
+    commentstyle=\CommonCommentStyle,
+}
+
+\lstset{
+    keywordstyle=\CommonKeywordStyle,
+}
+
+\lstset{
+    stringstyle=\CommonStringStyle,
+    morestring=[b]",
+    morestring=[b]',
+    morestring=[d]
+}
+
+%%%
+%%% определение собственных языков
+%%%
+
+\localSources{ConfigNet}
+\localSources{CSharp}
+
+\localSources{FilterPython}
+
+\localSources{FFmpegBash}
+
+
+
+
+

@@ -1,0 +1,104 @@
+
+
+
+
+\begin{frame}{Сравнение средних}
+    \graybox{Как устроены}{
+        \begin{itemize}
+            \item разница двух оценок сигнала;
+            \item сигнал оцениваем через средние.
+        \end{itemize}%
+    }
+    \vspace{1em}
+    \orangebox{Выражается формулой}{
+        \[
+            V \esim  W \Leftarrow  \left\lbrace
+                \begin{array}{rll}
+                    |{\overline{M}_{A,t} - \overline{M}_{B,t}}| & \to & 0; \\
+                    \overline{M}_{s,t} = \overline{M}_{s,t,n}  & = & \frac{1}{s}\sum\limits^{t}_{k=t-s} Y_{k,n}.
+                \end{array}
+            \right.   
+        \]
+        Здесь:
+        \begin{itemize}
+            \item {
+                $A$, $B$ — выбранные размеры скользящих окон;
+            }
+            \item {
+                $Y_{k}$ — состояние видео в момент времени $k$.
+            }
+        \end{itemize}
+    }
+\end{frame}
+
+
+\begin{frame}{Сравнение средних}
+    \bluebox{Для двумерного кадра}{
+     \[
+        Y_{k,n} = Y_{k,2}  =  \frac{1}{w \cdot h } 
+            \sum\limits_{i=0}^{w} \sum\limits_{j=0}^{h}
+                y_{k}^{(i, j)}    
+    \]
+    }
+    \vspace{1em}
+    \orangebox{В общем случае}{
+    \[
+            Y_{k,n} = 
+            \dfrac
+                { \sum\limits_{i_1=0}^{w_1} 
+                    \ldots 
+                        \sum\limits_{i_n=0}^{w_n} 
+                            y_{k}^{(i_1\ \ldots\ i_n)}}
+                {\prod\limits_{j=1}^{n} w_j  } .
+    \]
+    }
+\end{frame}
+
+\begin{frame}{Сравнение средних}
+    \orangebox{Плюсы}{
+        \begin{itemize}
+            \item не очень требовательны к ресурсам.
+            \item могут ловить и резкие и плавные переходы
+        \end{itemize}%
+    }
+    \vspace{1.5em}
+    \bluebox{Минусы}{
+        \begin{itemize}
+            \item требуется заранее подобрать размеры скользящих окон;
+            \begin{itemize}
+                \item при малом размере ловят шум;
+                \item при большом — могут пропустить событие;
+            \end{itemize}%
+            \item требуется хранить скользящее окно.
+        \end{itemize}%
+    }
+\end{frame}
+
+
+\subsection{Динамичное видео}
+
+\begin{image-frame}{
+        <<Дядя Стёпа~—~милиционер>>, разницы средних\\
+    }
+    \includegraphics[width=11cm]
+    {img/video/example/averages/mean-diff-stepa-from-00.pdf}
+\end{image-frame}
+
+
+\begin{image-frame}{
+        <<Дядя Стёпа~—~милиционер>>, разницы средних \\
+        (нашли центральную точку перехода)
+    }
+    \includegraphics[width=11cm]
+    {img/video/example/averages/mean-diff-stepa-from-90.pdf}
+\end{image-frame}
+
+
+\subsection{Спокойное видео}
+
+\begin{image-frame}{
+        Съёмка с БПЛА над побережьем Тулума, разницы средних \\
+    }
+    \includegraphics[width=11cm]
+    {img/video/example/averages/mean-diff-tulum.pdf}
+\end{image-frame}

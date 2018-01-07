@@ -1,0 +1,176 @@
+% !TeX encoding = UTF-8
+
+
+\begin{frame}{Улучшения статического порога}
+    
+    \begin{orange-box}{Проблема:}
+        \begin{itemize}
+        \item большой порог для плавного видео:
+            \begin{itemize}
+                \item события найдены не будут;
+            \end{itemize}
+        \item маленький порог для динамичного видео:
+            \begin{itemize}
+                \item много ложных срабатываний;
+            \end{itemize}
+        \item если видео имеет плавные и динамичные участки:
+            \begin{itemize}
+                \item порог подобрать невозможно.
+            \end{itemize}
+        \end{itemize}
+    \end{orange-box}
+    \vspace{1.5em}
+    \begin{grass-green-box}{Решение:}
+        \begin{itemize}
+            \item Учитывать «динамичность» видео:
+            \begin{enumerate}
+                \item Масштабировать разницы кадров:
+                \begin{itemize}
+                    \item нормировать по окрестности.
+                \end{itemize}
+                \item Учитывать среднюю величину и дисперсию.
+            \end{enumerate}
+        \end{itemize}
+    \end{grass-green-box}
+    
+\end{frame}
+
+\subsubsection*{Нормировка по размаху}
+
+\begin{frame}{Нормировка по размаху}
+
+    \begin{gray-box}{Нормировка разницы кадров}
+        \begin{enumerate}
+            \item Выберем размер скользящего окна (вектора задержек) — $s$.
+            \item Для каждого кадра из последовательности:
+            \begin{enumerate}
+                \item Вычислим максимальное и минимальное значение разницы 
+                кадров на этом окне.
+                \item Вычислим размах разниц для данного скользящего окна.
+                \item От текущего значения разницы соседних кадров
+                отнимем минимальное значение разницы на скользящем окне,
+                и поделим на размах
+            \end{enumerate}
+            \item Таким образом мы получим нормированное 
+            по размаху значение разницы кадров для данного скользящего окна.
+            \[
+                D_{s,t} = \dfrac
+                    {D_{t} - \min \left( D_{t-s} \dots  D_{t} \right)}
+                    {\max \left( D_{t-s} \dots  D_{t} \right)
+                        - \min \left( D_{t-s} \dots  D_{t} \right)}
+            \]  
+        \end{enumerate}
+    \end{gray-box}
+\end{frame}
+
+\begin{frame}[fragile]{Нормировка по размаху: описание на мета-языке}
+\begin{lstlisting}[language=FilterPython]
+    delay = DelayFilter()      # %{\cmnt Фильтр линейной задержки.}%
+    orig  = delay(0)           # %{\cmnt Входящий сигнал без изменения.}%
+    shift = ShiftSWFilter()    # %{\cmnt Сдвиг сигнала на один кадр.}%
+    diff  = orig - shift       # %{\cmnt Разница соседних кадров.}%
+    norm  = NormFilter()       # %{\cmnt Норма сигнала.}%
+    
+    # %{\cmnt Возвращает скользящее окно размером 400 для каждого кадра}%
+    sw = BaseSWFilter(s=400, min_size=2)
+    
+    sw_max = sw | max  # %{\cmnt Максимум по скользящему окну.}%
+    sw_min = sw | min  # %{\cmnt Минимум по скользящему окну.}%
+    
+    sw_norm = (orig - sw_min) / (sw_max - sw_min) # %{\cmnt Масштабирование.}%
+    
+    # %{\cmnt Масштабированная разница по скользящему окну}%
+    d_sw_filter = diff | abs | norm(l=1) | sw_norm
+    
+    # %{\cmnt Результирующий фильтр: точки разладок.}%
+    result_filter = d_sw_filter | threshold
+\end{lstlisting}
+\end{frame}
+
+
+\begin{image-frame}
+    [Съёмка с БПЛА над побережьем Тулума]
+    {нормировка по размаху (s = 400)}
+    \includegraphics[height=7.5cm]%
+    {img/video/example/threshold/static/sad-swnorm-400-tulum.pdf}
+\end{image-frame}
+
+\begin{image-frame}
+    [Съёмка с БПЛА над побережьем Тулума]
+    {Нормировка по размаху (s = 200)}
+    \includegraphics[height=7.5cm]%
+    {img/video/example/threshold/static/sad-swnorm-200-tulum.pdf}
+\end{image-frame}
+
+\begin{image-frame}
+    [Съёмка с БПЛА над побережьем Тулума]
+    {Нормировка по размаху (s = 100)}
+    \includegraphics[height=7.5cm]%
+    {img/video/example/threshold/static/sad-swnorm-100-tulum.pdf}
+\end{image-frame}
+
+
+\begin{image-frame}{Нормировка по размаху (s = 100), <<Дядя Стёпа~—~милиционер>>}
+    \includegraphics[height=7.5cm]%
+    {img/video/example/threshold/static/sad-swnorm-100-stepa.pdf}
+\end{image-frame}
+
+
+\begin{image-frame}{Нормировка по размаху (s = 400), <<Дядя Стёпа~—~милиционер>>}
+    \includegraphics[height=7.5cm]%
+    {img/video/example/threshold/static/sad-swnorm-400-stepa.pdf}
+\end{image-frame}
+
+
+\begin{frame}{Свойства нормировки по размаху}
+    \begin{orange-box}{Достоинства:}
+        \begin{itemize}
+            \item относительная величина порога:
+            \begin{itemize}
+                \item не нужно подбирать для каждого случая;
+                \item можно использовать везде одну и ту же величину.
+            \end{itemize}
+        \end{itemize}
+    \end{orange-box}
+    \vspace{1.5em}
+    \begin{blue-box}{Недостатки:}
+        \begin{itemize}
+            \item нужно подбирать размер окна:
+            \begin{itemize}
+                \item при малом размере окна — 
+                нормируем для паразитных шумов
+                \item при большом размере 
+                — пропускаем разладки.
+            \end{itemize}
+        \end{itemize}
+    \end{blue-box}
+\end{frame}
+
+\subsubsection*{Голосование по размаху}
+
+\begin{frame}{Метод голосований}
+    \begin{orange-box}{Достоинства:}
+        \begin{itemize}
+            \item относительная величина порога:
+            \begin{itemize}
+                \item не нужно подбирать для каждого случая;
+                \item можно использовать везде одну и ту же величину.
+            \end{itemize}
+        \end{itemize}
+    \end{orange-box}
+    \vspace{1.5em}
+    \begin{blue-box}{Недостатки:}
+        \begin{itemize}
+            \item нужно подбирать размер окна:
+            \begin{itemize}
+                \item при малом размере окна — 
+                нормируем для паразитных шумов
+                \item при большом размере 
+                — пропускаем разладки.
+            \end{itemize}
+        \end{itemize}
+    \end{blue-box}
+\end{frame}
+
+
+

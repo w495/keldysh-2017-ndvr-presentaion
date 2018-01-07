@@ -1,0 +1,246 @@
+
+\subsection{Виды}
+
+\begin{frame}[allowframebreaks]{Поиск на основе сцен}
+
+    \orangebox{Кадр\ ---~{\it frame}, фотографический кадр}
+    {\footnotesize
+        \begin{itemize}
+            \item[${\color{pacificorange} \Leftarrow}$]
+                отдельная статическая картинка;
+            \item[${\color{pacificorange} \Leftarrow}$]
+                обозначим $\videoframe$.
+        \end{itemize}
+    }
+
+    \vspace{12pt}
+    \zgreenbox{Cъемка\ ---~{\it shot}, кинематографический кадр}
+    {\footnotesize
+        \begin{itemize}
+            \item[${\color{zdarkgreen} \Leftarrow}$]
+                множество фотографических кадров,
+                единство процесса съемки;
+            \item[${\color{zdarkgreen} \Leftarrow}$]
+                обозначим $\videoshot$,
+                $\videoframe \in \videoshot$;
+            \item[${\color{zdarkgreen} \Leftarrow}$]
+                часто называют <<сценой>>, 
+                далее будем рассматривать, $\videoshot$, назвая сценой;
+        \end{itemize}
+    }
+    \vspace{12pt}
+    \zbluebox{Сцена\ ---~{\it scene}, монтажный кадр}
+    {\footnotesize
+        \begin{itemize}
+            \item[${\color{zdarkblue} \Leftarrow}$]
+                множество фотографических кадров,
+                единство места и времени;
+            \item[${\color{zdarkblue} \Leftarrow}$]
+                обозначим $\videoscene$,
+                $\videoframe \in \videoshot \subset \videoscene$.
+        \end{itemize}
+    }
+
+    \zgreenbox{Сцена как <<съемка>>, кинематографический кадр}
+    {
+        ---~совокупность множества фотографических кадров $\videoframe$
+        внутри временной области $\videoline$, кадры,
+        которой $\videoframe_{\color{red} \videoshot, i}$
+        значительно отличается от кадров соседних областей.
+        \[
+            \videoshot =
+                \{
+                    \videoframe_{\color{red} \videoshot, i}
+                        | \videoframediff(\videoframe_{\color{red} \videoshot, i},
+                            \videoframe_{\color{red} \videoshot, j})
+                                < {\color{red} \varepsilon},
+                            \videoframe_{\color{red} \videoshot, i},
+                            \videoframe_{\color{red} \videoshot, j}
+                            \in \videoline
+                \}
+        \]\[
+            \videoframediff \text{\footnotesize \ ---~функция разности кадров}.
+        \]
+    }
+
+    Аналогично можно ввести определение <<звуковой сцены>>,
+    предварительно разделив звуковой сигнал на отсчеты.
+\end{frame}
+
+
+\begin{frame}{Аномалии}
+
+    \begin{gray-box}{Аномалия}
+        Аномалия — скачкообразное изменение свойств наблюдаемого ряда 
+        в заранее неизвестный момент времени. 
+        Иногда аномалию называют «разладкой».
+    \end{gray-box}
+    \vspace{12pt}
+    \begin{blue-box}{Моменты событий:}
+        моменты времени, в~которых наблюдались аномалии
+    \end{blue-box}
+    \vspace{12pt}
+    \begin{orange-box}{Утверждение о событиях}
+        Моменты событий совпадают с моментами смены съёмок. 
+    \end{orange-box}
+
+\end{frame}
+
+
+
+\begin{frame}{Аномалии}
+    \begin{blue-box}{}
+        Пусть даны два видео — $V(t)$ и $W(t)$.
+        Считаем, что видео является частным случаем временного ряда.
+    \end{blue-box}
+    \vspace{12pt}
+    \begin{blue-box}{Аномалия}
+        Из точек временного ряда $V(t)$, в которых наблюдались аномалии, 
+        построим временной ряд $(ev_{i})^{k}_{i=1}$.
+        \[
+            \left\lbrace
+                \begin{array}{lcl}
+                    (ev_{i})^{k}_{i=1} & = &  ev_1, ev_2, \ldots, ev_k; \\
+                    \left\lbrace ev_1, ev_2, \ldots, ev_k  \right\rbrace & \subset & V 
+                \end{array}
+            \right.
+        \]
+        Для $W(t)$ аналогичным образом построим  $(ew_{i})^{n}_{i=1}$.
+    \end{blue-box}
+\end{frame}
+
+
+
+\begin{frame}{Нечёткие дубликаты}
+    \begin{orange-box}{Одинаковые явления}
+    $V$ и $W$ выражают одинаковую
+    последовательность явлений, если существует $\tser{x}{m}$, 
+    такой что $ \tset{x}{m} \subset \tset{ev}{k} $ 
+    и~$ \tset{x}{m} \subset \tset{ew}{n}$.
+    \[
+        V \esim  W \Leftrightarrow  
+        \exists \tser{x}{m}; \quad \left\lbrace
+            \begin{array}{lclll}
+                \tset{x}{m} & \subset 
+                    & \tset{ev}{k} 
+                    & \subset & V; \\
+                \tset{x}{m} & \subset 
+                    & \tset{ew}{n} 
+                    & \subset & W 
+            \end{array}
+        \right.
+    \]
+    \end{orange-box}
+        \vspace{12pt}
+    \begin{gray-box}{Нечёткие дубликаты}
+        $V$ и $W$ — нечёткие дубликаты друг друга,
+        если существует $\tser{x}{m}$, 
+        такой что $ \tset{x}{m} \subset \tset{v}{k} $ 
+        и~$ \tset{x}{m} \subset \tset{w}{n}$.
+        \[
+            V \ndsim  W \Leftrightarrow 
+            \exists \tser{x}{m}; \quad \left\lbrace
+                \begin{array}{lclll}
+                    \tset{x}{m} & \subset 
+                        & \tset{v}{k} 
+                        & \subset & V; \\
+                    \tset{x}{m} & \subset 
+                        & \tset{w}{n} 
+                        & \subset & W 
+                \end{array}
+            \right.
+        \]
+    \end{gray-box}
+\end{frame}
+
+
+\begin{frame}{Теорема о нечётких дубликатах}
+
+   \begin{orange-box}{Одинаковые явления}
+        Нечеткие дубликаты видео выражают 
+        одинаковую последовательность явлений.
+        \[
+             V \esim  W \Rightarrow  V \ndsim  W
+        \]
+    \end{orange-box}
+
+\end{frame}
+
+
+% \begin{frame}{Теорема о дубликатах}
+
+%     \[
+%         \left\lbrace
+%             \begin{array}{lcl}
+%                 (ev_{i})^{k}_{i=1} & = &  ev_1, ev_2, \ldots, ev_k; \\
+%                 \left\lbrace ev_1, ev_2, \ldots, ev_k  \right\rbrace & \subset & V 
+%             \end{array}
+%         \right.
+%     \]
+
+%         \begin{gray-box}{Видео — последовательность фактов или событий}
+%         \begin{itemize}
+%             \item События развиваются во времени.
+%             \item Свойства событий
+%             — {\it пространственная} характеристика видео,
+%             \item продолжительность и порядок фактов — {\it временная}.
+%         \end{itemize}%
+%     \end{gray-box}
+% \end{frame}
+
+
+
+% \begin{frame}{Приложение: алгоритм поиска нечетких дубликатов}
+%     \begin{itemize} \footnotesize
+%         \item $\nv$\ ---~новое видео;
+%         \item $\setsv = \{\sv[1], \sv[2], \dots, \sv[n]\}$\ ---~исходные видео:
+%             \begin{itemize}
+%                 \item[${\color{zdarkblue}\leftarrow}$]
+%                     {\scriptsize  $\setsv$ может быть пустым};
+%                 \item[${\color{zdarkblue}\leftarrow}$]
+%                     {\scriptsize для непустого $\setsv$
+%                         вычислены дескрипторы сцен элементов.}
+%             \end{itemize}
+%         \item[1.] Сравниваем дескриптор каждой
+%             сцены $\videoshot_{\color{red}\nv,i}$ из $\nv$\
+%             с дескриптором каждой сцены
+%             $\videoshot_{\color{red}\sv[k],j}$ из $\sv[k]$ в $L_2$.
+%         \item[2.] Если дескрипторы совпали $\nv$ c дескрипторами $\sv[k]$.
+%             на~некотором временном промежутке ,
+%             то считаем эту часть $\nv$\ ---~дубликатом $\sv[k]$,
+%             \begin{itemize}
+%                 \item[] {\scriptsize несовпавшие
+%                     части $\nv$\ помещаем в $\setsv$}.
+%             \end{itemize}
+%         \item[3.] Если дескрипторы не совпали, то считаем $\nv$\ уникальным и
+%             добавляем в $\setsv$.
+%     \end{itemize}
+% \end{frame}
+
+
+% \begin{frame}{Результаты и перспективы}
+
+%     \orangebox{Предложен подход}{
+%         \vspace{0.5em}
+%         \begin{itemize}
+%             \item[$\rhd$] относительные длины,
+%             \item[$\rhd$] выравнивания,
+%             \item[] \large $\color{zdarkgreen}\Rightarrow$ дескриптор \sout{сцен} {\it фактов в видео};
+%         \end{itemize}
+%         \vspace{0.5em}
+%     }
+%     \vspace{1.5em}
+%     \graybox{Проведены эксперименты (17 тыс. фильмов)}{
+%         \vspace{0.5em}
+%         \begin{itemize}
+%             \item точность $ = 0.8$;
+%             \item полнота $ = 0.7$;
+%             \item ложноотрицательные оценки;
+%             \item[$\color{red}\blacklozenge$] требуется более
+%                 детальное практическое сравнение с~существующими методами.
+%         \end{itemize}
+%         \vspace{0.5em}
+%     }
+
+% \end{frame}
+

@@ -1,0 +1,288 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% подключение и настройка параметров презентации
+%%%
+
+
+\usetheme[
+    backgroundimagefile=./img/theme/background-common.png,
+    backgroundtitleimagefile=./img/theme/background-title.png
+]{tvzavr}
+
+\setbeamertemplate{navigation symbols}{}
+
+\newenvironment{nomargin}{%
+  \begin{list}{}{%
+    \setlength{\topsep}{0pt}%
+    \setlength{\leftmargin}{0pt}%
+    \setlength{\rightmargin}{0pt}%
+    \setlength{\listparindent}{\parindent}%
+    \setlength{\itemindent}{\parindent}%
+    \setlength{\parsep}{\parskip}%
+  }%
+  \item[]}{\end{list}
+}
+
+\usepackage[most]{tcolorbox}
+
+\newtcolorbox{imagesubframe}[1][]{
+    enhanced,%
+    arc=5pt,%
+    colframe=white,%
+    outer arc=0pt,%
+    colback=white,%
+    boxrule=0.1pt,%
+    width=125mm,
+    height=89mm,
+    top=0mm,
+    bottom=0mm,
+    left=0cm,
+    right=0mm,
+    auto outer arc,
+    #1
+}
+
+\usepackage{environ}
+
+\usepackage{setspace}
+
+\setbeamercolor{note page}{bg=white!95!black, fg=black}
+\setbeamercolor{note title}{bg=white!90!black, fg=black}
+\setbeamercolor{note date}{parent=note title}
+
+
+\newsavebox{\notesbox}
+
+\newenvironment{note-frame}[1][]{%
+    \begin{lrbox}{\notesbox}%
+        \begin{minipage}{\textwidth}%
+            \setlength{\parskip}{1.5ex plus 1.5ex minus 1.2ex}%
+            \Times%
+}{%
+        \end{minipage}%
+    \end{lrbox}%
+    \note{%
+        \usebox{\notesbox}%
+    }%
+}%
+
+\NewEnviron{image-frame}[2][\unskip]{
+    %\setbeamercolor{background canvas}{bg=white}%
+    %\setbeamertemplate{background}{}%
+    %\setbeamertemplate{navigation symbols}{}%
+    \hspace*{-12mm}%
+    \begin{frame}%
+        \begin{imagesubframe}
+        \begin{center}%
+            {#2}
+            \BODY%
+        \end{center}%
+        \end{imagesubframe}%
+    \end{frame}%
+    \frametitle{#2}
+}
+
+
+\newcommand{\imageemptyframew}[1]{
+    {
+        \setbeamercolor{background canvas}{bg=black}
+        \setbeamertemplate{background}{}
+        \setbeamertemplate{navigation symbols}{}
+        \begin{frame}[plain]
+            \begin{tikzpicture}[remember picture,overlay]
+                \node[at=(current page.center)] {
+                    \includegraphics[width=\paperwidth]{#1}
+                };
+            \end{tikzpicture}
+         \end{frame}
+    }
+}
+
+
+
+\newcommand{\imageemptyframeh}[1]{
+    {
+        \setbeamercolor{background canvas}{bg=black}
+        \setbeamertemplate{background}{}
+        \setbeamertemplate{navigation symbols}{}
+        \begin{frame}[plain]
+            \begin{tikzpicture}[remember picture,overlay]
+                \node[at=(current page.center)] {
+                    \includegraphics[height=\paperheight]{#1}
+                };
+            \end{tikzpicture}
+         \end{frame}
+    }
+}
+
+
+%%%
+%%% описание цветных вставок
+%%%
+
+
+\newenvironment{orange-box}[1]{%
+    \setbeamercolor{uppercol}{fg=swhite,bg=pacificorange}%
+    \setbeamercolor{lowercol}{fg=black,bg=pacificcream}%
+    \begin{beamerboxesrounded}[upper=uppercol,lower=lowercol]{#1}%
+}{%
+    \end{beamerboxesrounded}%
+    \par%
+}
+
+\newcommand{\orangebox}[2]{
+    \begin{orange-box}{#1}
+        #2
+    \end{orange-box}
+}
+
+\newenvironment{deep-orange-box}[1]{%
+    \setbeamercolor{uppercol}{fg=swhite,bg=turquoise}%
+    \setbeamercolor{lowercol}{fg=black,bg=pacificcream}%
+    \begin{beamerboxesrounded}[upper=uppercol,lower=lowercol]{#1}% 
+}{%
+    \end{beamerboxesrounded}%
+    \par%
+}
+
+\newcommand{\deeporangebox}[2]{
+    \begin{deep-orange-box}{#1}
+        #2
+    \end{deep-orange-box}
+}
+
+
+\newenvironment{green-box}[1]{%
+    \setbeamercolor{uppergrn}{fg=swhite,bg=pacificgreen}%
+    \setbeamercolor{lowercol}{fg=black,bg=pacificcream}%
+    \begin{beamerboxesrounded}[upper=uppergrn,lower=lowercol]{#1}%
+}{%
+    \end{beamerboxesrounded}%
+    \par%
+}
+
+\newcommand{\greenbox}[2]{
+    \begin{green-box}{#1}
+        #2
+    \end{green-box}
+}
+
+\newenvironment{grass-green-box}[1]{%
+    \setbeamercolor{uppergrass}{fg=swhite,bg=grassgreen}%
+    \setbeamercolor{lowercol}{fg=black,bg=pacificcream}%
+    \begin{beamerboxesrounded}[upper=uppergrass,lower=lowercol]{#1}%
+}{%
+    \end{beamerboxesrounded}%
+    \par%
+}
+
+\newcommand{\grassgreenbox}[2]{
+    \begin{grass-green-box}{#1}
+        #2
+    \end{grass-green-box}
+}
+
+\newenvironment{gray-box}[1]{%
+  \setbeamercolor{uppergray}{fg=swhite,bg=pacificgray}%
+  \setbeamercolor{lowercol}{fg=black,bg=pacificcream}%
+  \begin{beamerboxesrounded}[upper=uppergray,lower=lowercol]{#1}%
+}{%
+  \end{beamerboxesrounded}%
+  \par%
+}
+
+\newcommand{\graybox}[2]{
+    \begin{gray-box}{#1}
+      #2
+    \end{gray-box}
+}
+
+\newenvironment{blue-box}[1]{%
+    \setbeamercolor{upperblue}{fg=swhite,bg=pacificblue}%
+    \setbeamercolor{lowercol}{fg=black,bg=pacificcream}%
+    \begin{beamerboxesrounded}[upper=upperblue,lower=lowercol]{#1}%
+}{%
+    \end{beamerboxesrounded}%
+    \par%
+}
+
+\newcommand{\bluebox}[2]{
+    \begin{blue-box}{#1}
+        #2
+    \end{blue-box}
+}
+
+
+
+\newcommand{\zgreentitlebox}[1]{
+    \setbeamercolor{lowercol}{fg=black,bg=zcreamgreen}
+    \begin{beamerboxesrounded}[lower=lowercol]
+        {} #1
+    \end{beamerboxesrounded}
+}
+
+\newcommand{\zgreenbox}[2]{
+    \setbeamercolor{uppercol}{fg=swhite,bg=zdarkgreen}
+    \setbeamercolor{lowercol}{fg=black,bg=zcreamgreen}
+    \begin{beamerboxesrounded}[upper=uppercol,lower=lowercol]
+        {#1} #2
+    \end{beamerboxesrounded}
+}
+
+\newcommand{\zbluebox}[2]{
+    \setbeamercolor{uppercol}{fg=swhite,bg=zdarkblue}
+    \setbeamercolor{lowercol}{fg=black,bg=zcreamblue}
+    \begin{beamerboxesrounded}[upper=uppercol,lower=lowercol]
+        {#1} #2
+    \end{beamerboxesrounded}
+}
+
+\newcommand{\zredbox}[2]{
+    \setbeamercolor{uppercol}{fg=swhite,bg=zdarkred}
+    \setbeamercolor{lowercol}{fg=black,bg=zcreamred}
+    \begin{beamerboxesrounded}[upper=uppercol,lower=lowercol]
+        {#1} #2
+    \end{beamerboxesrounded}
+}
+
+\newcommand{\lbgGrayBox}[2]{
+    %\setbeamercolor{uppergray}{fg=swhite,bg=gray}
+    \setbeamercolor{uppergray}{fg=swhite,bg=pacificgray}
+    \setbeamercolor{lowercol}{fg=black,bg=white}
+    \begin{beamerboxesrounded}[upper=uppergray,lower=lowercol]{#1}
+        #2
+    \end{beamerboxesrounded}
+}
+
+\newcommand{\lbgOrangeBox}[2]{
+    %\setbeamercolor{uppergray}{fg=swhite,bg=gray}
+    \setbeamercolor{uppergray}{fg=swhite,bg=pacificorange}
+    \setbeamercolor{lowercol}{fg=black,bg=white}
+    \begin{beamerboxesrounded}[upper=uppergray,lower=lowercol]{#1}
+        #2
+    \end{beamerboxesrounded}
+}
+
+
+\newcommand{\lbgGreenBox}[2]{
+    %\setbeamercolor{uppergray}{fg=swhite,bg=gray}
+    \setbeamercolor{uppergray}{fg=swhite,bg=grassgreen}
+    \setbeamercolor{lowercol}{fg=black,bg=white}
+    \begin{beamerboxesrounded}[upper=uppergray,lower=lowercol]{#1}
+        #2
+    \end{beamerboxesrounded}
+}
+
+
+
+\newcommand{\lbgBlueBox}[2]{
+    %\setbeamercolor{uppergray}{fg=swhite,bg=gray}
+    \setbeamercolor{uppergray}{fg=swhite,bg=gray!50!teal!50!black}
+    \setbeamercolor{lowercol}{fg=black,bg=white}
+    \begin{beamerboxesrounded}[upper=uppergray,lower=lowercol]{#1}
+        #2
+    \end{beamerboxesrounded}
+}
+
+
+

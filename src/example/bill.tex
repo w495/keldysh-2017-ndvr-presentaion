@@ -1,0 +1,100 @@
+
+\begin{frame}{Еще один метод}
+    
+    \graybox{Штрафы по производной средней оценки}{
+        
+        \begin{itemize}
+            \item оценим сигнал кусочно-постоянной функцией $DTR_{w,d}(t)$:
+            \begin{itemize}
+                \item используем решающее дерево регрессии глубины $d$;
+                \item по скользящему окну размера $w$;
+                
+            \end{itemize}
+            \item размножение оценок:
+            \begin{itemize}
+                \item усредненная оценка по~$k$~регрессиям 
+                $S_{d}(t) = \dfrac{1}{k}\sum\limits_{i=1}^{k+1} DTR_{i \cdot y,d}(t)$;
+                \item окна разного размера $w = i \cdot g$, $g$ — шаг размера окна;
+            \end{itemize}
+            \item разница соседних точек:
+            \begin{itemize}
+                \item $S'(t) = \dfrac{d\,S(t)}{d\,t} = S(t) - S(t-1)$;
+            \end{itemize}
+            \item штраф за отклонение:
+            \begin{itemize}
+                \item $B_{w}(t) = \left( |S'(t)| > |\hat{\mu}_{w}(S'(t)) + A \cdot \hat{\sigma}_{w}(S'(t))| \right) \in \left\lbrace 0,1 \right\rbrace$;
+            \end{itemize}
+            \item еще раз размножение оценок (голосование):
+            \begin{itemize}
+                \item $V(t) = \dfrac{1}{n}\sum\limits_{j=1}^{n+1} B_{j \cdot z}(h)$;\quad $h$ — шаг размера окна;
+            \end{itemize}
+        \end{itemize}%
+        
+    }
+\end{frame}
+
+\begin{frame}[fragile]{Описание на мета-язые}
+
+Для решения задачи мы разработали мета-язык на базе языка Python.
+\begin{lstlisting}[language=FilterPython]
+delay = DelayFilter()      # %{\cmnt Фильтр линейной задержки.}%
+original = delay(0)        # %{\cmnt Входящий сигнал без изменения.}%
+shift = ShiftSWFilter()    # %{\cmnt Сдвиг сигнала на один кадр.}%
+diff = original - shift    # %{\cmnt Разница соседних кадров.}%
+norm = NormFilter()        # %{\cmnt Норма сигнала.}%
+modulus = ModulusFilter()  # %{\cmnt Модуль сигнала.}%
+mean = MeanSWFilter()      # %{\cmnt Среднее по скользящему окну.}%
+std = StdSWFilter()        # %{\cmnt Стандартное отклонение по окну.}%
+dtr = DecisionTreeRegressorSWFilter()
+
+n=8, k=8, h=25, g=25, d=2, a=3.0 # %{\cmnt параметры алгоритма}%
+
+S = sum(dtr(w=s*i+1,d=d) for i in range(1,k + 1)) / k
+B = lambda w: delay(0) > (mean(w=w) + a * std(w=w))
+V = sum(B(w=z*j) for j in range(1,n + 1)) / n
+
+# %{\cmnt Фильтр: собирается отложено до непосредсвенного применения.}%
+# %{\cmnt Оператор <<|>> означает <<конвейер>>.}%
+vfilter = norm(l=1) | S | diff | modulus | V
+\end{lstlisting}
+\end{frame}
+
+\begin{image-frame}{
+        <<Дядя Стёпа~—~милиционер>>,
+        штрафы по дискретной производной\\
+        усредненной кусочно-постоянной аппроксимации
+    }
+    \includegraphics[width=11cm]
+    {img/video/example/bill/dtr-stepa-from-00.pdf}
+\end{image-frame}
+
+
+\begin{image-frame}{
+        Съёмка с БПЛА над побережьем Тулума,
+        штрафы по дискретной производной\\
+        усредненной кусочно-постоянной аппроксимации
+    }\\
+    \includegraphics[width=11cm]
+    {img/video/example/bill/dtr-tulum.pdf}
+\end{image-frame}
+
+
+
+% \begin{frame}{Еще один метод}
+%     \orangebox{Плюсы}{
+%         \begin{itemize}
+%             \item интуитивный поиск аномалий;
+%             \item ловит и резкие и плавные переходы;
+%             \item относительный порог аномалии 
+%             можно выбрать после вычислений (в пределах).
+%         \end{itemize}%
+%     }
+%     \vspace{1em}
+%     \bluebox{Минусы}{
+%         \begin{itemize}
+%             \item требования вычислительным к ресурсам;
+%             \item пока плохо изучен, нужно исследовать свойства.
+%         \end{itemize}%
+%     }
+    
+% \end{frame}
